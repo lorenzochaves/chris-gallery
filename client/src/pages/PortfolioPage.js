@@ -52,12 +52,22 @@ const PortfolioPage = () => {
       }}
     >
       <div className="container mx-auto py-12 px-4">
-        <h1 className="mb-8 text-3xl font-bold text-center">Portfólio</h1>
+        {/* Título e descrição */}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl md:text-6xl font-serif font-bold mb-4">Portfólio</h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Explore a coleção de obras que capturam a essência da natureza através de cores vibrantes e formas geométricas únicas.
+          </p>
+        </div>
 
         {/* Categorias */}
-        <div className="mb-8 flex flex-wrap gap-2 justify-center">
+        <div className="mb-12 flex flex-wrap gap-3 justify-center">
           <button
-            className={`badge ${selectedCategory === null ? "badge-primary" : "badge-outline"}`}
+            className={`px-6 py-2 rounded-full text-lg transition-all duration-300 ${
+              selectedCategory === null 
+                ? "bg-black text-white" 
+                : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+            }`}
             onClick={() => { setSelectedCategory(null); setCurrentPage(1); }}
           >
             Todas
@@ -65,7 +75,11 @@ const PortfolioPage = () => {
           {categories.map((category) => (
             <button
               key={category.id}
-              className={`badge ${selectedCategory === category.id ? "badge-primary" : "badge-outline"}`}
+              className={`px-6 py-2 rounded-full text-lg transition-all duration-300 ${
+                selectedCategory === category.id 
+                  ? "bg-black text-white" 
+                  : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+              }`}
               onClick={() => { setSelectedCategory(category.id); setCurrentPage(1); }}
             >
               {category.nome || category.name}
@@ -79,7 +93,7 @@ const PortfolioPage = () => {
             <p>Carregando obras...</p>
           </div>
         ) : (
-          <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-8 gap-y-12 max-w-6xl justify-center">
+          <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl justify-center">
             {paginatedArtworks.map((artwork) => (
               <ArtworkCard key={artwork.id} artwork={artwork} categories={categories} />
             ))}
@@ -88,14 +102,14 @@ const PortfolioPage = () => {
 
         {/* Paginação */}
         {totalPages > 1 && (
-          <div className="flex justify-center mt-10 gap-2">
+          <div className="flex justify-center mt-12 gap-2">
             {Array.from({ length: totalPages }, (_, i) => (
               <button
                 key={i + 1}
-                className={`px-4 py-2 rounded-full border ${
+                className={`px-4 py-2 rounded-full text-lg ${
                   currentPage === i + 1
                     ? "bg-black text-white border-black"
-                    : "bg-white text-black border-gray-300 hover:bg-gray-100"
+                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
                 }`}
                 onClick={() => setCurrentPage(i + 1)}
               >
@@ -106,7 +120,7 @@ const PortfolioPage = () => {
         )}
 
         {!isLoading && paginatedArtworks.length === 0 && (
-          <div className="mt-8 text-center text-gray-500">Nenhuma obra encontrada nesta categoria.</div>
+          <div className="mt-8 text-center text-gray-500 text-lg">Nenhuma obra encontrada nesta categoria.</div>
         )}
       </div>
     </div>

@@ -18,9 +18,9 @@ const ArtworkCard = ({ artwork, categories = [] }) => {
   const mainUrl = artwork.image || (artwork.additionalImages && artwork.additionalImages[0]) || "/placeholder.svg"
 
   return (
-    <Link to={`/portfolio/${artwork.id}`} className="block">
+    <Link to={`/portfolio/${artwork.id}`} className="block group">
       <div
-        className="gallery-item bg-white shadow-lg hover:shadow-xl transition-all duration-500"
+        className="gallery-item bg-white shadow-lg hover:shadow-xl transition-all duration-500 rounded-lg overflow-hidden"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
@@ -28,7 +28,7 @@ const ArtworkCard = ({ artwork, categories = [] }) => {
           {isVideo(mainUrl) ? (
             <video
               src={mainUrl}
-              className="w-full h-full object-cover transition-transform duration-700"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               autoPlay
               loop
               muted
@@ -39,28 +39,34 @@ const ArtworkCard = ({ artwork, categories = [] }) => {
             <img 
               src={mainUrl} 
               alt={artwork.title} 
-              className="w-full h-full object-cover transition-transform duration-700"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
           )}
-          <div
-            className={`absolute inset-0 bg-black/0 transition-all duration-500 flex items-end ${
-              isHovering ? "bg-black/40" : ""
-            }`}
-          >
-            <div className={`w-full p-6 transform transition-all duration-500 ${
-              isHovering ? "translate-y-0" : "translate-y-full"
-            }`}>
-              <h3 className="text-xl font-serif font-bold text-white mb-2">{artwork.title}</h3>
-              {artwork.available && artwork.price && (
-                <p className="text-white/90 font-medium">
-                  R$ {artwork.price.toLocaleString("pt-BR")}
-                </p>
-              )}
+          <div className={`absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white transition-opacity duration-300 ${isHovering ? 'opacity-100' : 'opacity-0'}`}>
+            <h3 className="text-2xl font-bold mb-2">{artwork.title}</h3>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {categoryNames.map((name, index) => (
+                <span key={index} className="px-3 py-1 bg-white/20 rounded-full text-sm">
+                  {name}
+                </span>
+              ))}
             </div>
+            {artwork.available && artwork.price && (
+              <p className="mt-4 text-xl font-semibold">
+                R$ {artwork.price.toLocaleString('pt-BR')}
+              </p>
+            )}
           </div>
         </div>
-        <div className="p-4 text-center">
-          <h3 className="text-lg font-serif font-bold text-gray-900 mb-0 truncate">{artwork.title}</h3>
+        <div className="p-4">
+          <h3 className="text-xl font-medium text-gray-900 mb-2">{artwork.title}</h3>
+          <div className="flex flex-wrap gap-2">
+            {categoryNames.map((name, index) => (
+              <span key={index} className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-600">
+                {name}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </Link>

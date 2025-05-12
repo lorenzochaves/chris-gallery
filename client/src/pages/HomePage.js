@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { Link } from "react-router-dom"
 import { Carousel } from "react-responsive-carousel"
 import "react-responsive-carousel/lib/styles/carousel.min.css"
@@ -10,6 +10,7 @@ const HomePage = () => {
   const [featuredArtworks, setFeaturedArtworks] = useState([])
   const [categories, setCategories] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const carouselRef = useRef(null)
 
   useEffect(() => {
     const fetchImgs = async () => {
@@ -36,18 +37,30 @@ const HomePage = () => {
     fetchFeatured()
   }, [])
 
+  // Força o início do autoplay quando o componente montar
+  useEffect(() => {
+    if (carouselRef.current) {
+      const carousel = carouselRef.current;
+      // Simula um clique no botão "próximo" para iniciar o autoplay
+      setTimeout(() => {
+        carousel.increment();
+      }, 100);
+    }
+  }, [carrosselImages]);
+
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
       {/* Hero Section */}
       <section className="relative h-screen">
         <Carousel
+          ref={carouselRef}
           showThumbs={false}
           showStatus={false}
           showArrows={true}
           infiniteLoop={true}
           autoPlay={true}
-          interval={5000}
-          stopOnHover={true}
+          interval={3000}
+          stopOnHover={false}
           swipeable={true}
           className="h-full"
         >
