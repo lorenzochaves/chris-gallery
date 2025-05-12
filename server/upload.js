@@ -2,7 +2,8 @@ const multer = require('multer');
 const multerS3 = require('multer-s3');
 const { S3Client } = require('@aws-sdk/client-s3');
 const s3Client = require('./s3');
-require('dotenv').config();
+require("dotenv").config();
+
 
 const upload = multer({
   storage: multerS3({
