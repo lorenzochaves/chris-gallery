@@ -1,14 +1,17 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams, useNavigate, Link } from "react-router-dom"
 import api from "../utils/api"
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
+import { FaInstagram, FaShareAlt } from "react-icons/fa"
 
 function isVideo(url) {
   return url && url.match(/\.(mp4)$/i)
 }
+
+const TABS = ["Descrição", "Detalhes"]
 
 const ArtworkDetailPage = () => {
   const { id } = useParams()
@@ -17,6 +20,7 @@ const ArtworkDetailPage = () => {
   const [categories, setCategories] = useState([])
   const [selectedImage, setSelectedImage] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState("Detalhes")
 
   useEffect(() => {
     const fetchArtwork = async () => {
@@ -73,88 +77,163 @@ const ArtworkDetailPage = () => {
   }
 
   return (
-    <div className="container mx-auto py-12 px-4 flex flex-col items-center pt-36">
-      <div className="flex flex-col md:flex-row gap-8 items-start w-full max-w-5xl">
-        {/* Imagem/vídeo principal com zoom */}
-        <div className="flex flex-col items-center md:items-start min-w-[340px] max-w-md w-full">
-          {isVideo(selectedImage || artwork.image) ? (
-            <video
-              src={selectedImage || artwork.image}
-              className="rounded-lg shadow w-full h-[420px] object-cover bg-black"
-              controls
-              autoPlay
-              loop
-              muted
-              playsInline
-            />
-          ) : (
-            <Zoom>
-              <img
-                src={selectedImage || artwork.image}
-                alt={artwork.title}
-                className="rounded-lg shadow w-full h-[420px] object-cover bg-white"
-              />
-            </Zoom>
-          )}
-          {/* Miniaturas das imagens/vídeos adicionais */}
-          <div className="flex gap-2 mt-4">
-            {allImages.map((url, idx) =>
-              isVideo(url) ? (
-                <video
-                  key={idx}
-                  src={url}
-                  className="w-20 h-20 object-cover rounded cursor-pointer"
-                  onClick={() => setSelectedImage(url)}
-                  muted
-                  playsInline
-                />
-              ) : (
-                <img
-                  key={idx}
-                  src={url}
-                  alt={`Adicional ${idx + 1}`}
-                  className="w-20 h-20 object-cover rounded cursor-pointer"
-                  onClick={() => setSelectedImage(url)}
-                />
-              )
-            )}
-          </div>
+    <div
+      className="min-h-screen pt-36"
+      style={{
+        background: `linear-gradient(rgba(255,250,244,0.92), rgba(255,250,244,0.92)), url('/background1.jpeg') center center / cover no-repeat fixed`
+      }}
+    >
+      <div className="container mx-auto py-12 px-4 flex flex-col items-center">
+        <div className="w-full max-w-6xl mb-4">
+          <Link to="/portfolio" className="inline-flex items-center text-gray-600 hover:text-black text-lg font-medium mb-4">
+            <span className="mr-2 text-2xl">←</span> Voltar para o portfólio
+          </Link>
         </div>
+        <div className="flex flex-col md:flex-row gap-12 items-start w-full max-w-6xl">
+          {/* Imagem/vídeo principal com zoom */}
+          <div className="flex flex-col items-center md:items-start min-w-[340px] max-w-md w-full">
+            {isVideo(selectedImage || artwork.image) ? (
+              <video
+                src={selectedImage || artwork.image}
+                className="rounded-lg shadow w-full h-[420px] object-cover bg-black"
+                controls
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+            ) : (
+              <Zoom>
+                <img
+                  src={selectedImage || artwork.image}
+                  alt={artwork.title}
+                  className="rounded-lg shadow w-full h-[420px] object-cover bg-white"
+                />
+              </Zoom>
+            )}
+            {/* Miniaturas das imagens/vídeos adicionais */}
+            <div className="flex gap-2 mt-4">
+              {allImages.map((url, idx) =>
+                isVideo(url) ? (
+                  <video
+                    key={idx}
+                    src={url}
+                    className="w-20 h-20 object-cover rounded cursor-pointer"
+                    onClick={() => setSelectedImage(url)}
+                    muted
+                    playsInline
+                  />
+                ) : (
+                  <img
+                    key={idx}
+                    src={url}
+                    alt={`Adicional ${idx + 1}`}
+                    className="w-20 h-20 object-cover rounded cursor-pointer"
+                    onClick={() => setSelectedImage(url)}
+                  />
+                )
+              )}
+            </div>
+          </div>
 
-        <div className="space-y-6 flex-1 min-w-[280px]">
-          <div>
-            <h1 className="text-3xl font-bold">{artwork.title}</h1>
-            {categories.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-2">
-                {categories.map((category) => (
-                  <span key={category.id} className="rounded-full bg-gray-100 px-2 py-1 text-xs">
-                    {category.nome}
+          {/* Info principal */}
+          <div className="space-y-6 flex-1 min-w-[280px]">
+            <div>
+              <h1 className="text-4xl font-bold mb-2 font-serif">{artwork.title}</h1>
+              <div className="flex items-center gap-3 mb-4">
+                {categories.length > 0 && categories.map((cat) => (
+                  <span key={cat.id} className="rounded-full bg-green-100 text-green-800 px-3 py-1 text-sm font-semibold">
+                    {cat.nome}
                   </span>
                 ))}
+                <span className="text-gray-500 font-medium text-base">{getYear(artwork.created_at || artwork.createdAt || artwork.ano || new Date())}</span>
               </div>
-            )}
-          </div>
 
-          <div className="prose max-w-none">
-            <p>{artwork.description}</p>
-          </div>
+              {/* Tabs */}
+              <div className="flex gap-2 mb-6">
+                {TABS.map(tab => (
+                  <button
+                    key={tab}
+                    className={`px-4 py-2 rounded-t-lg font-semibold border-b-2 transition-all duration-200 ${activeTab === tab ? 'bg-white border-green-600 text-green-700 shadow' : 'bg-gray-100 border-transparent text-gray-500'}`}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
 
-          <div className="rounded-lg bg-gray-100 p-4">
-            <div className="mb-2 font-medium">Detalhes</div>
-            <dl className="grid grid-cols-2 gap-1 text-sm">
-              <dt>Dimensões</dt>
-              <dd>{artwork.dimensions}</dd>
-              <dt>Técnica</dt>
-              <dd>{artwork.technique}</dd>
-              <dt>Status</dt>
-              <dd>{artwork.available ? "Disponível" : "Indisponível"}</dd>
-              {artwork.available && artwork.price && (
-                <>
-                  <dt>Preço</dt>
-                  <dd>R$ {artwork.price.toLocaleString("pt-BR")}</dd>
-                </>
-              )}
-            </dl>
+              {/* Tab Content */}
+              <div className="bg-white rounded-b-lg shadow p-6 mb-6">
+                {activeTab === "Descrição" && (
+                  <div className="prose max-w-none">
+                    <p>{artwork.description}</p>
+                  </div>
+                )}
+                {activeTab === "Detalhes" && (
+                  <dl className="grid grid-cols-2 gap-2 text-base">
+                    <div>
+                      <dt className="font-semibold text-gray-700">Técnica</dt>
+                      <dd className="text-gray-900">{artwork.technique}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-semibold text-gray-700">Dimensões</dt>
+                      <dd className="text-gray-900">{artwork.dimensions}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-semibold text-gray-700">Preço</dt>
+                      <dd className="text-gray-900">{artwork.price ? `R$ ${artwork.price.toLocaleString('pt-BR')}` : '-'}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-semibold text-gray-700">Disponível</dt>
+                      <dd className="text-gray-900">{artwork.available ? 'Sim' : 'Não'}</dd>
+                    </div>
+                    {artwork.materials && (
+                      <div className="col-span-2">
+                        <dt className="font-semibold text-gray-700">Materiais</dt>
+                        <dd className="text-gray-900">{artwork.materials}</dd>
+                      </div>
+                    )}
+                  </dl>
+                )}
+              </div>
+
+              {/* Compartilhar */}
+              <div className="mb-6">
+                <div className="font-semibold mb-2">Compartilhar</div>
+                <div className="flex gap-3">
+                  <a
+                    href={`https://instagram.com`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center w-10 h-10 rounded bg-gray-100 hover:bg-pink-100 text-pink-600 text-xl"
+                    title="Instagram"
+                  >
+                    <FaInstagram />
+                  </a>
+                  <button
+                    className="inline-flex items-center justify-center w-10 h-10 rounded bg-gray-100 hover:bg-green-100 text-green-700 text-xl"
+                    title="Copiar link"
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href)
+                    }}
+                  >
+                    <FaShareAlt />
+                  </button>
+                </div>
+              </div>
+
+              {/* Interessado nesta obra? */}
+              <div className="bg-gray-50 rounded-lg p-5 mt-8">
+                <div className="font-bold text-lg mb-2">Interessado nesta obra?</div>
+                <div className="text-gray-700 mb-4">Entre em contato para mais informações sobre disponibilidade e preços.</div>
+                <a
+                  href="/contato"
+                  className="inline-block px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow hover:bg-green-700 transition-all duration-300 text-base"
+                >
+                  Solicitar Informações
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>

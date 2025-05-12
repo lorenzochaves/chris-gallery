@@ -42,49 +42,64 @@ const AboutPage = () => {
   const slides = uniqueImages.length === 1 ? [uniqueImages[0], uniqueImages[0]] : uniqueImages
 
   return (
-    <div className="container mx-auto py-16 px-4 max-w-5xl pt-36">
-      {/* Título e subtítulo */}
-      <h1 className="text-4xl md:text-5xl font-bold mb-2 font-serif uppercase tracking-wide">Chris Fontenelle</h1>
-      <p className="text-gray-700 text-lg mb-4 max-w-2xl">
-        {profile.subtitulo || "O trabalho de uma vida de abraçar tanto o criativo quanto o quantitativo, desenvolvendo negócios online prósperos e marcas invejáveis."}
-      </p>
-      <hr className="border-t border-gray-300 mb-8" />
-
-      {/* Grid principal */}
-      <div className="grid md:grid-cols-2 gap-8 items-start">
-        {/* Biografia */}
-        <div>
-          <p className="text-gray-900 text-lg leading-relaxed mb-8 whitespace-pre-line">
-            {profile.bio}
-          </p>
-          <Link
-            to="/contato"
-            className="inline-block border-2 border-black px-6 py-2 rounded font-semibold uppercase tracking-wider hover:bg-black hover:text-white transition"
-          >
-            Contate-me
-          </Link>
+    <>
+      {/* Hero Section */}
+      <section
+        className="relative w-full h-[340px] md:h-[380px] flex items-center justify-center mb-[-60px]"
+        style={{
+          background: `url('/background3.jpeg') center center / cover no-repeat`,
+        }}
+      >
+        <div className="relative z-10 flex flex-col items-center justify-center w-full h-full text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 font-serif">Sobre a Artista</h1>
+          <p className="text-xl md:text-2xl text-white font-light">Conheça a história e inspiração por trás das obras</p>
         </div>
-        {/* Carrossel de fotos */}
-        <div className="flex items-center justify-center bg-white rounded-lg shadow-xl min-h-[420px] h-[420px] w-full">
-          {slides.length > 0 ? (
-            <Slider {...sliderSettings} className="w-full h-full">
-              {slides.map((img, idx) => (
-                <div key={img.id || idx} className="h-[420px] w-full flex items-center justify-center">
-                  <img
-                    src={img.url}
-                    alt="Artista"
-                    className="object-cover h-[420px] w-full rounded-lg"
-                    style={{ maxHeight: 420 }}
-                  />
-                </div>
-              ))}
-            </Slider>
-          ) : (
-            <img src="/images/artist-placeholder.jpg" alt="Retrato da Artista" className="h-[420px] w-full object-cover rounded-lg" />
-          )}
+      </section>
+
+      <div className="container mx-auto py-16 px-4 max-w-5xl mt-16">
+        {/* Título e subtítulo */}
+        <h1 className="text-4xl md:text-5xl font-bold mb-2 font-serif uppercase tracking-wide">Chris Fontenelle</h1>
+        <p className="text-gray-700 text-lg mb-4 max-w-2xl">
+          {profile.subtitulo || "O trabalho de uma vida de abraçar tanto o criativo quanto o quantitativo, desenvolvendo negócios online prósperos e marcas invejáveis."}
+        </p>
+        <hr className="border-t border-gray-300 mb-8" />
+
+        {/* Grid principal */}
+        <div className="grid md:grid-cols-2 gap-8 items-start">
+          {/* Biografia */}
+          <div>
+            <p className="text-gray-900 text-lg leading-relaxed mb-8 whitespace-pre-line">
+              {profile.bio}
+            </p>
+            <Link
+              to="/contato"
+              className="inline-block border-2 border-black px-6 py-2 rounded font-semibold uppercase tracking-wider hover:bg-black hover:text-white transition"
+            >
+              Contate-me
+            </Link>
+          </div>
+          {/* Carrossel de fotos */}
+          <div className="flex items-center justify-center bg-white rounded-lg shadow-xl min-h-[420px] h-[420px] w-full">
+            {slides.length > 0 ? (
+              <Slider {...sliderSettings} className="w-full h-full">
+                {slides.map((img, idx) => (
+                  <div key={img.id || idx} className="h-[420px] w-full flex items-center justify-center">
+                    <img
+                      src={img.url}
+                      alt="Artista"
+                      className="object-cover h-[420px] w-full rounded-lg"
+                      style={{ maxHeight: 420 }}
+                    />
+                  </div>
+                ))}
+              </Slider>
+            ) : (
+              <img src="/images/artist-placeholder.jpg" alt="Retrato da Artista" className="h-[420px] w-full object-cover rounded-lg" />
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

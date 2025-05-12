@@ -5,7 +5,7 @@ import HomePage from "./pages/HomePage"
 import PortfolioPage from "./pages/PortfolioPage"
 import ArtworkDetailPage from "./pages/ArtworkDetailPage"
 import AboutPage from "./pages/AboutPage"
-import ContactPage from "./pages/ContactPage"
+import ContatoPage from "./pages/ContatoPage"
 import AdminLoginPage from "./pages/admin/AdminLoginPage"
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage"
 import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage"
@@ -28,7 +28,7 @@ function App() {
           <Route path="/portfolio" element={<PortfolioPage />} />
           <Route path="/portfolio/:id" element={<ArtworkDetailPage />} />
           <Route path="/sobre" element={<AboutPage />} />
-          <Route path="/contato" element={<ContactPage />} />
+          <Route path="/contato" element={<ContatoPage />} />
           <Route path="/admin" element={<AdminLoginPage />} />
 
           {/* Rotas protegidas */}

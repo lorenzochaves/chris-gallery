@@ -17,31 +17,24 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path
 
   return (
-    <nav className="w-full border-b border-gray-200 bg-white/80 backdrop-blur-sm fixed top-0 z-50">
-      <div className="max-w-7xl mx-auto flex items-center justify-between py-6 px-8">
-        {/* Esquerda: Logo + Nome */}
+    <nav className="w-full fixed top-0 z-50" style={{background: 'linear-gradient(90deg, #f8fafc 0%, #f3f4f6 60%, #e7e5e4 100%)'}}>
+      <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-8">
+        {/* Esquerda: Nome do site (sem logo) */}
         <div className="flex items-center gap-4">
-          <img
-            src="/logo.png"
-            alt="Logo"
-            className="h-12 w-12 object-contain rounded-full shadow-lg transition-transform duration-300 hover:scale-105"
-            style={{ minWidth: 48 }}
-          />
-          <Link to="/" className="text-3xl font-bold font-serif tracking-wide hover:text-gray-700 transition-colors duration-300">
+          <Link to="/" className="text-5xl font-extrabold font-fleur tracking-wide text-gray-900">
             Chris Fontenelle Art
           </Link>
         </div>
 
         {/* Centro: Navegação */}
-        <div className="hidden md:flex items-center gap-12">
+        <div className="hidden md:flex items-center gap-16">
           {routes.map((route) => (
             <Link
               key={route.href}
               to={route.href}
-              className={`text-lg font-medium transition-all duration-300 relative ${
-                isActive(route.href) 
-                  ? "text-black after:absolute after:bottom-[-4px] after:left-0 after:w-full after:h-0.5 after:bg-black" 
-                  : "text-gray-600 hover:text-black after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-black hover:after:w-full after:transition-all after:duration-300"
+              className={`text-xl font-normal transition-all duration-300 relative text-gray-600 hover:text-amber-700 ${
+                isActive(route.href)
+                  ? 'underline underline-offset-8 decoration-2 decoration-amber-400' : ''
               }`}
             >
               {route.label}
@@ -55,7 +48,7 @@ const Navbar = () => {
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           <svg
-            className="w-6 h-6"
+            className="w-6 h-6 text-white"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -81,16 +74,15 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200">
+        <div className="md:hidden" style={{background: 'linear-gradient(90deg, #f8fafc 0%, #f3f4f6 60%, #e7e5e4 100%)'}}>
           <div className="px-4 py-2 space-y-1">
             {routes.map((route) => (
               <Link
                 key={route.href}
                 to={route.href}
-                className={`block py-2 px-4 text-base font-medium transition-colors duration-300 ${
+                className={`block py-2 px-4 text-base font-normal transition-colors duration-300 text-gray-600 hover:text-amber-700 ${
                   isActive(route.href)
-                    ? "text-black bg-gray-50"
-                    : "text-gray-600 hover:text-black hover:bg-gray-50"
+                    ? 'underline underline-offset-8 decoration-2 decoration-amber-400' : ''
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
