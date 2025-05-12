@@ -3,6 +3,12 @@
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import api from "../utils/api"
+import Zoom from 'react-medium-image-zoom'
+import 'react-medium-image-zoom/dist/styles.css'
+
+function isVideo(url) {
+  return url && url.match(/\.(mp4)$/i)
+}
 
 const ArtworkDetailPage = () => {
   const { id } = useParams()
@@ -67,49 +73,66 @@ const ArtworkDetailPage = () => {
   }
 
   return (
-    <div className="container mx-auto py-12 px-4">
-      <div className="grid gap-8 md:grid-cols-2">
-        <div className="space-y-4">
-          {/* Imagem principal */}
-          <div className="relative aspect-square overflow-hidden rounded-lg">
-            <img src={selectedImage || artwork.image} alt={artwork.title} className="h-full w-full object-cover" />
-          </div>
-
-          {/* Miniaturas das imagens adicionais */}
-          {allImages.length > 1 && (
-            <div className="grid grid-cols-4 gap-2">
-              {allImages.map((image, index) => (
-                <div
-                  key={index}
-                  className={`relative aspect-square cursor-pointer overflow-hidden rounded-md border-2 ${
-                    selectedImage === image ? "border-black" : "border-transparent"
-                  }`}
-                  onClick={() => setSelectedImage(image)}
-                >
-                  <img
-                    src={image || "/placeholder.svg"}
-                    alt={`${artwork.title} - imagem ${index + 1}`}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
+    <div className="container mx-auto py-12 px-4 flex flex-col items-center pt-36">
+      <div className="flex flex-col md:flex-row gap-8 items-start w-full max-w-5xl">
+        {/* Imagem/vídeo principal com zoom */}
+        <div className="flex flex-col items-center md:items-start min-w-[340px] max-w-md w-full">
+          {isVideo(selectedImage || artwork.image) ? (
+            <video
+              src={selectedImage || artwork.image}
+              className="rounded-lg shadow w-full h-[420px] object-cover bg-black"
+              controls
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          ) : (
+            <Zoom>
+              <img
+                src={selectedImage || artwork.image}
+                alt={artwork.title}
+                className="rounded-lg shadow w-full h-[420px] object-cover bg-white"
+              />
+            </Zoom>
           )}
+          {/* Miniaturas das imagens/vídeos adicionais */}
+          <div className="flex gap-2 mt-4">
+            {allImages.map((url, idx) =>
+              isVideo(url) ? (
+                <video
+                  key={idx}
+                  src={url}
+                  className="w-20 h-20 object-cover rounded cursor-pointer"
+                  onClick={() => setSelectedImage(url)}
+                  muted
+                  playsInline
+                />
+              ) : (
+                <img
+                  key={idx}
+                  src={url}
+                  alt={`Adicional ${idx + 1}`}
+                  className="w-20 h-20 object-cover rounded cursor-pointer"
+                  onClick={() => setSelectedImage(url)}
+                />
+              )
+            )}
+          </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-6 flex-1 min-w-[280px]">
           <div>
             <h1 className="text-3xl font-bold">{artwork.title}</h1>
             {categories.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-2">
                 {categories.map((category) => (
                   <span key={category.id} className="rounded-full bg-gray-100 px-2 py-1 text-xs">
-                    {category.name}
+                    {category.nome}
                   </span>
                 ))}
               </div>
             )}
-            <p className="mt-2 text-gray-500">Ano: {getYear(artwork.createdAt)}</p>
           </div>
 
           <div className="prose max-w-none">

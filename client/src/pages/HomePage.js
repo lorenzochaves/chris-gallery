@@ -1,48 +1,90 @@
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import ArtSlideshow from "../components/ArtSlideshow"
+import { Carousel } from "react-responsive-carousel"
+import "react-responsive-carousel/lib/styles/carousel.min.css"
+import api from "../utils/api"
 
 const HomePage = () => {
+  const [carrosselImages, setCarrosselImages] = useState([])
+
+  useEffect(() => {
+    const fetchImgs = async () => {
+      const res = await api.get("/api/profile/homepage-carrossel")
+      setCarrosselImages(res.data)
+    }
+    fetchImgs()
+  }, [])
+
   return (
-    <main className="flex min-h-screen flex-col">
-      <div className="h-[60vh] w-full">
-        <ArtSlideshow />
-      </div>
+    <div className="min-h-screen bg-[#f5f5f5] pt-28">
+      {/* Hero Section */}
+      <section className="relative h-screen">
+        <Carousel
+          showThumbs={false}
+          showStatus={false}
+          showArrows={true}
+          infiniteLoop={true}
+          autoPlay={true}
+          interval={5000}
+          stopOnHover={true}
+          swipeable={true}
+          className="h-full"
+        >
+          {carrosselImages.length > 0 ? (
+            carrosselImages.map(img => (
+              <div key={img.id}>
+                <img
+                  src={img.url}
+                  alt="Artwork"
+                  className="h-screen w-full object-cover"
+                />
+              </div>
+            ))
+          ) : (
+            <div className="h-screen bg-gray-100 flex items-center justify-center">
+              <p className="text-gray-500">Carregando imagens...</p>
+            </div>
+          )}
+        </Carousel>
 
-      <div className="container mx-auto flex flex-1 flex-col items-center justify-center gap-8 py-16 text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Galeria de Arte</h1>
-        <p className="max-w-[600px] text-lg text-gray-500">Explore a coleção de obras de arte únicas e expressivas.</p>
-
-        <div className="flex flex-col gap-4 sm:flex-row">
-          <Link
-            to="/portfolio"
-            className="inline-flex items-center justify-center gap-2 rounded-md bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-black/90"
-          >
-            Portfólio
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4"
+        {/* Overlay com texto */}
+        <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+          <div className="text-center text-white max-w-3xl px-4">
+            <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6">
+              Chris Fontenelle Art
+            </h1>
+            <p className="text-xl md:text-2xl mb-8 font-light">
+              Arte contemporânea que transcende fronteiras
+            </p>
+            <Link
+              to="/portfolio"
+              className="inline-block px-8 py-4 bg-white text-black font-medium hover:bg-black hover:text-white transition-all duration-300"
             >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
-          </Link>
+              Explorar Galeria
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Seção Contato */}
+      <section className="py-20 px-4">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-4xl font-serif font-bold mb-6">
+            Entre em Contato
+          </h2>
+          <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
+            Interessado em adquirir uma obra ou tem alguma dúvida? Entre em
+            contato conosco.
+          </p>
           <Link
             to="/contato"
-            className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-100"
+            className="inline-block px-8 py-4 bg-black text-white font-medium hover:bg-gray-800 transition-all duration-300"
           >
-            Contato
+            Fale Conosco
           </Link>
         </div>
-      </div>
-    </main>
+      </section>
+    </div>
   )
 }
 

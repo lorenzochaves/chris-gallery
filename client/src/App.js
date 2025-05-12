@@ -13,8 +13,10 @@ import AdminNewCategoryPage from "./pages/admin/AdminNewCategoryPage"
 import AdminEditCategoryPage from "./pages/admin/AdminEditCategoryPage"
 import AdminNewArtworkPage from "./pages/admin/AdminNewArtworkPage"
 import AdminEditArtworkPage from "./pages/admin/AdminEditArtworkPage"
+import AdminProfilePage from "./pages/admin/AdminProfilePage"
 import ProtectedRoute from "./components/ProtectedRoute"
 import NotFoundPage from "./pages/NotFoundPage"
+import AdminCarrosselPage from "./pages/admin/AdminCarrosselPage"
 
 function App() {
   return (
@@ -75,6 +77,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminEditArtworkPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/profile"
+            element={
+              <ProtectedRoute>
+                <AdminProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/carrossel"
+            element={
+              <ProtectedRoute>
+                <AdminCarrosselPage />
               </ProtectedRoute>
             }
           />

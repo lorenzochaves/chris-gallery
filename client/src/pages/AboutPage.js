@@ -1,75 +1,87 @@
+import { useEffect, useState } from "react"
+import api from "../utils/api"
+import Slider from "react-slick"
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
+import { Link } from "react-router-dom"
+
 const AboutPage = () => {
+  const [profile, setProfile] = useState(null)
+  const [images, setImages] = useState([])
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const res = await api.get("/api/profile")
+      setProfile(res.data)
+      const imgRes = await api.get("/api/profile/images")
+      setImages(imgRes.data)
+    }
+    fetchProfile()
+  }, [])
+
+  if (!profile) return <div className="container mx-auto py-16 px-4">Carregando...</div>
+
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 700,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3500,
+    arrows: false,
+    pauseOnHover: false,
+    adaptiveHeight: false,
+  }
+
+  const uniqueImages = images.filter(
+    (img, idx, arr) => arr.findIndex(i => i.url === img.url) === idx
+  )
+
+  // Garante pelo menos 2 slides para o carrossel funcionar corretamente
+  const slides = uniqueImages.length === 1 ? [uniqueImages[0], uniqueImages[0]] : uniqueImages
+
   return (
-    <div className="relative">
-      {/* Background artwork elements */}
-      <div className="absolute inset-0 -z-10 opacity-5">
-        <div className="absolute top-20 left-10 h-64 w-64 rotate-12">
-          <img src="/images/placeholder-1.jpg" alt="Arte de fundo" className="h-full w-full object-cover" />
-        </div>
-        <div className="absolute bottom-40 right-20 h-80 w-80 -rotate-6">
-          <img src="/images/placeholder-2.jpg" alt="Arte de fundo" className="h-full w-full object-cover" />
-        </div>
-      </div>
+    <div className="container mx-auto py-16 px-4 max-w-5xl pt-36">
+      {/* Título e subtítulo */}
+      <h1 className="text-4xl md:text-5xl font-bold mb-2 font-serif uppercase tracking-wide">Chris Fontenelle</h1>
+      <p className="text-gray-700 text-lg mb-4 max-w-2xl">
+        {profile.subtitulo || "O trabalho de uma vida de abraçar tanto o criativo quanto o quantitativo, desenvolvendo negócios online prósperos e marcas invejáveis."}
+      </p>
+      <hr className="border-t border-gray-300 mb-8" />
 
-      <div className="container mx-auto py-16 px-4">
-        <h1 className="mb-12 text-center font-serif text-5xl font-light tracking-wide md:text-6xl">Sobre Mim</h1>
-
-        <div className="mx-auto grid max-w-5xl gap-12 md:grid-cols-2">
-          <div className="relative aspect-[3/4] overflow-hidden rounded-lg shadow-xl">
-            <img src="/images/artist-placeholder.jpg" alt="Retrato da Artista" className="h-full w-full object-cover" />
-          </div>
-
-          <div className="flex flex-col justify-center space-y-6 font-serif">
-            <h2 className="text-2xl font-medium">Nome da Artista</h2>
-
-            <div className="space-y-4 text-lg leading-relaxed">
-              <p>
-                Nascida em São Paulo em 1985, minha jornada artística começou na infância, quando descobri o poder
-                transformador das cores e formas. Formada em Artes Visuais pela Universidade de São Paulo, desenvolvi um
-                estilo único que combina técnicas tradicionais com abordagens contemporâneas.
-              </p>
-
-              <p>
-                Minha obra explora temas como identidade, memória e a relação entre o ser humano e a natureza. Através
-                de pinceladas expressivas e uma paleta vibrante, busco criar experiências visuais que convidam o
-                espectador a uma reflexão profunda sobre nossa existência.
-              </p>
-
-              <p>
-                Ao longo dos anos, participei de exposições em galerias renomadas no Brasil e exterior. Cada obra que
-                crio é uma parte de minha história, um fragmento de minha visão de mundo que compartilho com quem se
-                permite mergulhar em minhas criações.
-              </p>
-            </div>
-
-            <div className="pt-4">
-              <div className="text-xl font-medium">Formação</div>
-              <ul className="mt-2 space-y-2">
-                <li>• Mestrado em Artes Visuais - Universidade de São Paulo (2010-2012)</li>
-                <li>• Bacharelado em Artes Plásticas - Universidade de São Paulo (2004-2008)</li>
-                <li>• Curso de Técnicas Pictóricas - Escola de Belas Artes de Paris (2009)</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="mx-auto mt-16 max-w-4xl space-y-6 font-serif text-lg leading-relaxed">
-          <h3 className="text-center text-2xl font-medium">Processo Criativo</h3>
-          <p>
-            Meu processo criativo começa com a observação atenta do mundo ao meu redor. Coleto impressões, sensações e
-            memórias que posteriormente transformo em estudos e esboços. Trabalho principalmente com tinta acrílica e
-            óleo sobre tela, mas também exploro técnicas mistas, incorporando elementos como colagem e materiais
-            orgânicos.
+      {/* Grid principal */}
+      <div className="grid md:grid-cols-2 gap-8 items-start">
+        {/* Biografia */}
+        <div>
+          <p className="text-gray-900 text-lg leading-relaxed mb-8 whitespace-pre-line">
+            {profile.bio}
           </p>
-          <p>
-            Cada obra passa por múltiplas camadas e transformações até atingir o equilíbrio visual e emocional que
-            busco. Acredito que a arte tem o poder de conectar pessoas através de experiências compartilhadas, e é esse
-            diálogo silencioso entre a obra e o espectador que me motiva a continuar criando.
-          </p>
-          <p>
-            Convido você a explorar meu portfólio e descobrir as histórias que cada obra carrega consigo. Se desejar
-            conhecer mais sobre meu trabalho ou adquirir uma peça, ficarei feliz em conversar.
-          </p>
+          <Link
+            to="/contato"
+            className="inline-block border-2 border-black px-6 py-2 rounded font-semibold uppercase tracking-wider hover:bg-black hover:text-white transition"
+          >
+            Contate-me
+          </Link>
+        </div>
+        {/* Carrossel de fotos */}
+        <div className="flex items-center justify-center bg-white rounded-lg shadow-xl min-h-[420px] h-[420px] w-full">
+          {slides.length > 0 ? (
+            <Slider {...sliderSettings} className="w-full h-full">
+              {slides.map((img, idx) => (
+                <div key={img.id || idx} className="h-[420px] w-full flex items-center justify-center">
+                  <img
+                    src={img.url}
+                    alt="Artista"
+                    className="object-cover h-[420px] w-full rounded-lg"
+                    style={{ maxHeight: 420 }}
+                  />
+                </div>
+              ))}
+            </Slider>
+          ) : (
+            <img src="/images/artist-placeholder.jpg" alt="Retrato da Artista" className="h-[420px] w-full object-cover rounded-lg" />
+          )}
         </div>
       </div>
     </div>

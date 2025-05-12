@@ -2,14 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
+:root {
+  --background: #f5f5f5;
+  --foreground: #1a1a1a;
+  --primary: #2c2c2c;
+  --secondary: #666666;
+  --accent: #d4af37;
+  --muted: #e5e5e5;
+}
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-    "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  color: var(--foreground);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  background: 
+    linear-gradient(rgba(255,250,244,0.92), rgba(255,250,244,0.92)),
+    url('../public/background.jpeg') center center / cover no-repeat fixed;
 }
 
 .font-serif {
@@ -17,54 +32,70 @@ body {
 }
 
 @layer base {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1, h2, h3, h4, h5, h6 {
     @apply font-serif;
   }
 }
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+    @apply inline-flex items-center justify-center rounded-none text-sm font-medium transition-all duration-300 focus-visible:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
   }
 
   .btn-primary {
-    @apply bg-black text-white hover:bg-black/90;
+    @apply bg-black text-white hover:bg-black/90 hover:translate-y-[-2px] shadow-lg;
   }
 
   .btn-secondary {
-    @apply bg-gray-200 text-gray-900 hover:bg-gray-300;
+    @apply bg-[#2c2c2c] text-white hover:bg-[#1a1a1a] hover:translate-y-[-2px] shadow-lg;
   }
 
   .btn-outline {
-    @apply border border-gray-300 bg-white hover:bg-gray-100 hover:text-gray-900;
+    @apply border-2 border-black bg-transparent hover:bg-black hover:text-white transition-all duration-300;
   }
 
   .btn-destructive {
-    @apply bg-red-500 text-white hover:bg-red-600;
+    @apply bg-red-500 text-white hover:bg-red-600 hover:translate-y-[-2px] shadow-lg;
   }
 
   .input {
-    @apply flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply flex h-12 w-full rounded-none border-2 border-gray-300 bg-white px-4 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-300;
   }
 
   .badge {
-    @apply inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2;
+    @apply inline-flex items-center rounded-none border-2 px-3 py-1 text-xs font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2;
   }
 
   .badge-primary {
-    @apply border-transparent bg-black text-white hover:bg-black/80;
+    @apply border-black bg-black text-white hover:bg-white hover:text-black;
   }
 
   .badge-secondary {
-    @apply border-transparent bg-gray-200 text-gray-900 hover:bg-gray-300;
+    @apply border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200;
   }
 
   .badge-outline {
-    @apply border-gray-300 text-gray-700 hover:bg-gray-100;
+    @apply border-black text-black hover:bg-black hover:text-white;
+  }
+
+  .card {
+    @apply bg-white shadow-lg transition-all duration-300 hover:shadow-xl;
+  }
+
+  .gallery-item {
+    @apply relative overflow-hidden transition-all duration-500;
+  }
+
+  .gallery-item:hover img {
+    @apply scale-105;
+  }
+
+  .gallery-item::after {
+    content: '';
+    @apply absolute inset-0 bg-black/0 transition-all duration-300;
+  }
+
+  .gallery-item:hover::after {
+    @apply bg-black/20;
   }
 }

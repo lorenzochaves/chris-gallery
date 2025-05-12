@@ -28,17 +28,17 @@ export const AuthProvider = ({ children }) => {
     checkAuth()
   }, [])
 
-  const login = async (username, password) => {
+  const login = async (email, senha) => {
     try {
-      const response = await api.post("/api/auth/login", { username, password })
-      setIsAuthenticated(response.data.success)
-      return response.data
+      const response = await api.post("/api/auth/login", { email, senha });
+      setIsAuthenticated(response.data.success || true);
+      return response.data;
     } catch (error) {
-      console.error("Erro ao fazer login:", error)
-      return { success: false, message: "Erro ao fazer login" }
+      console.error("Erro ao fazer login:", error);
+      return { success: false, message: "Erro ao fazer login" };
     }
-  }
-
+  };
+  
   const logout = async () => {
     try {
       await api.post("/api/auth/logout")

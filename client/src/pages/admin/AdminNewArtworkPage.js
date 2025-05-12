@@ -5,19 +5,21 @@ import { Link, useNavigate } from "react-router-dom"
 import api from "../../utils/api"
 
 const AdminNewArtworkPage = () => {
+  const navigate = useNavigate()
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [image, setImage] = useState("")
   const [price, setPrice] = useState("")
   const [available, setAvailable] = useState(true)
   const [dimensions, setDimensions] = useState("")
   const [technique, setTechnique] = useState("")
+  const artista = 'Chris Fontenelle'; 
+  const [imagemPrincipal, setImagemPrincipal] = useState(null)
+  const [imagensAdicionais, setImagensAdicionais] = useState([])
   const [categories, setCategories] = useState([])
   const [selectedCategories, setSelectedCategories] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState("")
-  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -34,14 +36,10 @@ const AdminNewArtworkPage = () => {
     fetchCategories()
   }, [])
 
-  const handleCategoryChange = (categoryId) => {
-    setSelectedCategories((prev) => {
-      if (prev.includes(categoryId)) {
-        return prev.filter((id) => id !== categoryId)
-      } else {
-        return [...prev, categoryId]
-      }
-    })
+  const handleCategoryChange = (id) => {
+    setSelectedCategories((prev) =>
+      prev.includes(id) ? prev.filter((cid) => cid !== id) : [...prev, id]
+    )
   }
 
   const handleSubmit = async (e) => {
@@ -49,17 +47,31 @@ const AdminNewArtworkPage = () => {
     setError("")
     setIsSaving(true)
 
+    const formData = new FormData()
+    formData.append("title", title)
+    formData.append("description", description)
+    formData.append("price", price)
+    formData.append("available", available)
+    formData.append("dimensions", dimensions)
+    formData.append("technique", technique)
+    formData.append("artista", artista)
+    formData.append("usuario_id", 1) // fixo por enquanto
+
+    if (imagemPrincipal) {
+      formData.append("imagem_principal", imagemPrincipal)
+    }
+
+    imagensAdicionais.forEach(file => formData.append("imagens_adicionais", file))
+
+    selectedCategories.forEach((id) => {
+      formData.append("categoryIds", id)
+    })
+
     try {
-      await api.post("/api/artworks", {
-        title,
-        description,
-        image,
-        price: price ? Number(price) : null,
-        available,
-        dimensions,
-        technique,
-        categoryIds: selectedCategories,
+      await api.post("/api/artworks", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
+
       navigate("/admin/dashboard")
     } catch (error) {
       console.error("Erro ao criar obra:", error)
@@ -70,155 +82,147 @@ const AdminNewArtworkPage = () => {
   }
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto py-12 px-4 text-center">
-        <p>Carregando categorias...</p>
-      </div>
-    )
+    return <div className="p-4 text-center">Carregando categorias...</div>
   }
 
   return (
-    <div className="container mx-auto py-12 px-4">
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Nova Obra</h1>
-        <Link to="/admin/dashboard" className="btn btn-outline">
-          Voltar
-        </Link>
-      </div>
+    <div className="min-h-screen bg-white pt-28">
+      <div className="container mx-auto py-12 px-4">
+        <div className="mb-8 flex items-center justify-between">
+          <h1 className="text-3xl font-bold">Nova Obra</h1>
+          <Link to="/admin/dashboard" className="btn btn-outline">
+            Voltar
+          </Link>
+        </div>
 
-      <div className="mx-auto max-w-2xl">
-        {error && <div className="mb-6 rounded-md bg-red-50 p-4 text-sm text-red-500">{error}</div>}
+        <div className="mx-auto max-w-2xl">
+          {error && <div className="mb-6 bg-red-100 p-4 text-sm text-red-600 rounded">{error}</div>}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <label htmlFor="title" className="block text-sm font-medium">
-              Título
-            </label>
-            <input
-              id="title"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="input"
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label htmlFor="description" className="block text-sm font-medium">
-              Descrição
-            </label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={5}
-              className="input min-h-[100px]"
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label htmlFor="image" className="block text-sm font-medium">
-              URL da Imagem
-            </label>
-            <input
-              id="image"
-              type="text"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              className="input"
-              placeholder="/images/placeholder.jpg"
-            />
-            <p className="text-xs text-gray-500">
-              Deixe em branco para usar uma imagem padrão. Em um sistema real, você teria um uploader de imagens.
-            </p>
-          </div>
-
-          <div className="grid gap-6 sm:grid-cols-2">
-            <div className="space-y-2">
-              <label htmlFor="price" className="block text-sm font-medium">
-                Preço (R$)
-              </label>
-              <input
-                id="price"
-                type="number"
-                min="0"
-                step="0.01"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                className="input"
-              />
+          <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium">Título</label>
+              <input value={title} onChange={(e) => setTitle(e.target.value)} required className="input w-full" />
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="dimensions" className="block text-sm font-medium">
-                Dimensões
-              </label>
-              <input
-                id="dimensions"
-                type="text"
-                value={dimensions}
-                onChange={(e) => setDimensions(e.target.value)}
-                className="input"
-                placeholder="Ex: 60 x 80 cm"
+            <div>
+              <label className="block text-sm font-medium">Descrição</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 required
+                rows={4}
+                className="input w-full"
               />
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <label htmlFor="technique" className="block text-sm font-medium">
-              Técnica
-            </label>
-            <input
-              id="technique"
-              type="text"
-              value={technique}
-              onChange={(e) => setTechnique(e.target.value)}
-              className="input"
-              placeholder="Ex: Acrílica sobre tela"
-              required
-            />
-          </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium">Preço (R$)</label>
+                <input
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  className="input w-full"
+                />
+              </div>
 
-          <div className="space-y-2">
-            <label className="block text-sm font-medium">Categorias</label>
-            <div className="grid gap-2 sm:grid-cols-2">
-              {categories.map((category) => (
-                <div key={category.id} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id={`category-${category.id}`}
-                    checked={selectedCategories.includes(category.id)}
-                    onChange={() => handleCategoryChange(category.id)}
-                    className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
-                  />
-                  <label htmlFor={`category-${category.id}`} className="text-sm">
-                    {category.name}
-                  </label>
-                </div>
-              ))}
+              <div>
+                <label className="block text-sm font-medium">Dimensões</label>
+                <input
+                  value={dimensions}
+                  onChange={(e) => setDimensions(e.target.value)}
+                  required
+                  className="input w-full"
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="available"
-              checked={available}
-              onChange={(e) => setAvailable(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
-            />
-            <label htmlFor="available" className="text-sm font-medium">
-              Disponível para venda
-            </label>
-          </div>
+            <div>
+              <label className="block text-sm font-medium">Técnica</label>
+              <input
+                value={technique}
+                onChange={(e) => setTechnique(e.target.value)}
+                required
+                className="input w-full"
+              />
+            </div>
 
-          <button type="submit" className="btn btn-primary w-full" disabled={isSaving}>
-            {isSaving ? "Criando..." : "Criar Obra"}
-          </button>
-        </form>
+            <div>
+              <label className="block text-sm font-medium">Imagem Principal</label>
+              <input type="file" accept="image/*,video/mp4" onChange={(e) => setImagemPrincipal(e.target.files[0])} required />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium">Imagens/Vídeos Adicionais</label>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {imagensAdicionais.map((file, idx) => {
+                  const url = URL.createObjectURL(file)
+                  return (
+                    <div key={idx} style={{ position: "relative", display: "inline-block" }}>
+                      {file.type === "video/mp4" ? (
+                        <video src={url} style={{ maxWidth: 100, borderRadius: 4 }} controls muted />
+                      ) : (
+                        <img src={url} alt={`Novo adicional ${idx + 1}`} style={{ maxWidth: 100, borderRadius: 4 }} />
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setImagensAdicionais(imagensAdicionais.filter((_, i) => i !== idx))
+                        }}
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          right: 0,
+                          background: "rgba(255,0,0,0.7)",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: 24,
+                          height: 24,
+                          cursor: "pointer",
+                        }}
+                        title="Remover"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  )
+                })}
+              </div>
+              <input
+                type="file"
+                accept="image/*,video/mp4"
+                multiple
+                onChange={e => setImagensAdicionais([...imagensAdicionais, ...Array.from(e.target.files)])}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium">Categorias</label>
+              <div className="grid sm:grid-cols-2 gap-2">
+                {categories.map((cat) => (
+                  <label key={cat.id} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={selectedCategories.includes(cat.id)}
+                      onChange={() => handleCategoryChange(cat.id)}
+                    />
+                    {cat.nome}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input type="checkbox" checked={available} onChange={(e) => setAvailable(e.target.checked)} />
+              <label>Disponível</label>
+            </div>
+
+            <button type="submit" className="btn btn-primary w-full" disabled={isSaving}>
+              {isSaving ? "Criando..." : "Criar Obra"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   )

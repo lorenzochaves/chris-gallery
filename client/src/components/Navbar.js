@@ -17,69 +17,90 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur">
-      <div className="container mx-auto flex h-16 items-center px-4">
-        <Link to="/" className="mr-6 flex items-center space-x-2">
-          <span className="text-xl font-bold">Galeria</span>
-        </Link>
+    <nav className="w-full border-b border-gray-200 bg-white/80 backdrop-blur-sm fixed top-0 z-50">
+      <div className="max-w-7xl mx-auto flex items-center justify-between py-6 px-8">
+        {/* Esquerda: Logo + Nome */}
+        <div className="flex items-center gap-4">
+          <img
+            src="/logo.png"
+            alt="Logo"
+            className="h-12 w-12 object-contain rounded-full shadow-lg transition-transform duration-300 hover:scale-105"
+            style={{ minWidth: 48 }}
+          />
+          <Link to="/" className="text-3xl font-bold font-serif tracking-wide hover:text-gray-700 transition-colors duration-300">
+            Chris Fontenelle Art
+          </Link>
+        </div>
 
-        <nav className="hidden flex-1 items-center space-x-6 md:flex">
+        {/* Centro: Navegação */}
+        <div className="hidden md:flex items-center gap-12">
           {routes.map((route) => (
             <Link
               key={route.href}
               to={route.href}
-              className={`text-sm font-medium transition-colors hover:text-gray-600 ${
-                isActive(route.href) ? "text-black" : "text-gray-500"
+              className={`text-lg font-medium transition-all duration-300 relative ${
+                isActive(route.href) 
+                  ? "text-black after:absolute after:bottom-[-4px] after:left-0 after:w-full after:h-0.5 after:bg-black" 
+                  : "text-gray-600 hover:text-black after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-black hover:after:w-full after:transition-all after:duration-300"
               }`}
             >
               {route.label}
             </Link>
           ))}
-        </nav>
+        </div>
 
+        {/* Mobile Menu Button */}
         <button
-          className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 md:hidden"
+          className="md:hidden p-2"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
-          <span className="sr-only">Abrir menu</span>
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
+            className="w-6 h-6"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-6 w-6"
+            viewBox="0 0 24 24"
           >
-            <line x1="4" x2="20" y1="12" y2="12" />
-            <line x1="4" x2="20" y1="6" y2="6" />
-            <line x1="4" x2="20" y1="18" y2="18" />
+            {isMenuOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            )}
           </svg>
         </button>
-
-        {isMenuOpen && (
-          <div className="absolute inset-x-0 top-16 z-50 w-full bg-white p-4 shadow-lg md:hidden">
-            <nav className="grid gap-4">
-              {routes.map((route) => (
-                <Link
-                  key={route.href}
-                  to={route.href}
-                  className={`text-lg font-medium transition-colors hover:text-gray-600 ${
-                    isActive(route.href) ? "text-black" : "text-gray-500"
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {route.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-        )}
       </div>
-    </header>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-white border-t border-gray-200">
+          <div className="px-4 py-2 space-y-1">
+            {routes.map((route) => (
+              <Link
+                key={route.href}
+                to={route.href}
+                className={`block py-2 px-4 text-base font-medium transition-colors duration-300 ${
+                  isActive(route.href)
+                    ? "text-black bg-gray-50"
+                    : "text-gray-600 hover:text-black hover:bg-gray-50"
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {route.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </nav>
   )
 }
 

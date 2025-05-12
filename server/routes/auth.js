@@ -1,10 +1,10 @@
-const express = require("express")
-const router = express.Router()
-const authController = require("../controllers/authController")
-const { isAuthenticated } = require("../middleware/auth")
+const express = require("express");
+const router = express.Router();
+const authController = require("../controllers/authController");
 
-router.post("/login", authController.login)
-router.post("/logout", authController.logout)
-router.get("/check", authController.checkAuth)
+router.post("/register", authController.register); // 1x só
+router.post("/login", authController.login);
+router.post("/logout", authController.logout);
+router.get("/check-auth", authController.checkAuth);
 
-module.exports = router
+module.exports = router;

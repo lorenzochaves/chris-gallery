@@ -1,75 +1,73 @@
-const categories = require("../data/categories")
-let artworks = require("../data/artworks")
-const { v4: uuidv4 } = require("uuid")
+const pool = require("../db");
 
-// Obter todas as categorias
-exports.getAllCategories = (req, res) => {
-  res.json(categories)
-}
-
-// Obter categoria por ID
-exports.getCategoryById = (req, res) => {
-  const category = categories.find((c) => c.id === req.params.id)
-
-  if (!category) {
-    return res.status(404).json({ message: "Categoria não encontrada" })
+// Buscar todas as categorias
+exports.getAllCategories = async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM categorias ORDER BY id");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao buscar categorias" });
   }
+};
 
-  res.json(category)
-}
+// Buscar categoria por ID
+exports.getCategoryById = async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM categorias WHERE id = $1", [req.params.id]);
+    if (result.rows.length === 0) return res.status(404).json({ erro: "Categoria não encontrada" });
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao buscar categoria" });
+  }
+};
 
 // Criar nova categoria
-exports.createCategory = (req, res) => {
-  const { name, slug } = req.body
+exports.createCategory = async (req, res) => {
+  const { name, slug } = req.body;
 
-  const newCategory = {
-    id: uuidv4(),
-    name,
-    slug: slug || name.toLowerCase().replace(/\s+/g, "-"),
+  try {
+    const result = await pool.query(
+      "INSERT INTO categorias (nome, slug) VALUES ($1, $2) RETURNING *",
+      [name, slug || name.toLowerCase().replace(/\s+/g, "-")]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao criar categoria" });
   }
-
-  categories.push(newCategory)
-  res.status(201).json(newCategory)
-}
+};
 
 // Atualizar categoria
-exports.updateCategory = (req, res) => {
-  const { name, slug } = req.body
+exports.updateCategory = async (req, res) => {
+  const { name, slug } = req.body;
+  const { id } = req.params;
 
-  const index = categories.findIndex((c) => c.id === req.params.id)
+  try {
+    const result = await pool.query("SELECT * FROM categorias WHERE id = $1", [id]);
+    if (result.rows.length === 0) return res.status(404).json({ erro: "Categoria não encontrada" });
 
-  if (index === -1) {
-    return res.status(404).json({ message: "Categoria não encontrada" })
+    const updated = await pool.query(
+      `UPDATE categorias SET nome = $1, slug = $2 WHERE id = $3 RETURNING *`,
+      [name, slug || name.toLowerCase().replace(/\s+/g, "-"), id]
+    );
+    res.json(updated.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao atualizar categoria" });
   }
+};
 
-  const updatedCategory = {
-    ...categories[index],
-    name: name || categories[index].name,
-    slug: slug || (name ? name.toLowerCase().replace(/\s+/g, "-") : categories[index].slug),
+// Deletar categoria
+exports.deleteCategory = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query("DELETE FROM obras_categorias WHERE categoria_id = $1", [id]);
+    await pool.query("DELETE FROM categorias WHERE id = $1", [id]);
+    res.json({ mensagem: "Categoria deletada com sucesso" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao deletar categoria" });
   }
-
-  categories[index] = updatedCategory
-  res.json(updatedCategory)
-}
-
-// Excluir categoria
-exports.deleteCategory = (req, res) => {
-  const index = categories.findIndex((c) => c.id === req.params.id)
-
-  if (index === -1) {
-    return res.status(404).json({ message: "Categoria não encontrada" })
-  }
-
-  const categoryId = categories[index].id
-
-  // Remover a categoria
-  categories.splice(index, 1)
-
-  // Remover a categoria de todas as obras
-  artworks = artworks.map((artwork) => ({
-    ...artwork,
-    categoryIds: artwork.categoryIds.filter((id) => id !== categoryId),
-  }))
-
-  res.json({ message: "Categoria excluída com sucesso" })
-}
+};
