@@ -52,7 +52,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between pt-6 text-gray-400 text-sm">
-        <span>© {new Date().getFullYear()} Chris Fontenelle. Todos os direitos reservados.</span>
+        <span>© {new Date().getFullYear()} Chris Fontenelle. Todos os direitos reservados. site by Lorenzo Chaves</span>
       </div>
     </footer>
   )

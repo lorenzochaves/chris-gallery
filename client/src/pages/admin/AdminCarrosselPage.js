@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import api from "../../utils/api"
+import { Link } from "react-router-dom"
 import "../../styles/admin.css"
 
 const AdminCarrosselPage = () => {
@@ -47,6 +48,26 @@ const AdminCarrosselPage = () => {
       <div className="admin-content">
         <div className="admin-header">
           <h1 className="admin-title">Customizar Carrossel da Home</h1>
+          <div className="admin-actions">
+            <Link to="/admin/dashboard" className="admin-button admin-button-secondary">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-4 w-4 mr-2"
+              >
+                <path d="m12 19-7-7 7-7" />
+                <path d="M19 12H5" />
+              </svg>
+              Voltar
+            </Link>
+          </div>
         </div>
 
         {error && <div className="admin-alert admin-alert-error">{error}</div>}

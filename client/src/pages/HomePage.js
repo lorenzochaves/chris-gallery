@@ -83,23 +83,23 @@ const HomePage = () => {
 
         {/* Overlay com texto alinhado à esquerda */}
         <div className="absolute inset-0 bg-black/30 flex items-center justify-start">
-          <div className="text-left text-white max-w-2xl px-4 sm:px-8 md:px-12">
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-serif font-bold mb-2 sm:mb-4">
-              Flora Artística
+          <div className="text-left text-white max-w-2xl px-6 sm:px-8 md:px-12 lg:px-16">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-serif font-bold mb-4 sm:mb-6">
+              Chris Fontenelle Galeria
             </h1>
-            <p className="text-xl sm:text-2xl md:text-3xl font-light mb-6 sm:mb-10">
+            <p className="text-xl sm:text-2xl md:text-3xl font-light mb-8 sm:mb-12 max-w-xl">
               Explorando a natureza através de cores vibrantes e formas geométricas
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
               <Link
                 to="/portfolio"
-                className="px-6 sm:px-8 py-3 sm:py-4 bg-green-600 text-white font-semibold rounded-lg shadow hover:bg-green-700 transition-all duration-300 text-base sm:text-lg flex items-center justify-center gap-2"
+                className="px-8 sm:px-10 py-4 bg-green-600 text-white font-semibold rounded-lg shadow-lg hover:bg-green-700 hover:shadow-xl transition-all duration-300 text-lg sm:text-xl flex items-center justify-center gap-3"
               >
                 Ver Portfólio <span className="ml-2">→</span>
               </Link>
               <Link
                 to="/sobre"
-                className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-black font-semibold rounded-lg border border-white hover:bg-gray-100 transition-all duration-300 text-base sm:text-lg text-center"
+                className="px-8 sm:px-10 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-lg border-2 border-white hover:bg-white/20 transition-all duration-300 text-lg sm:text-xl text-center"
               >
                 Sobre a Artista
               </Link>
@@ -109,26 +109,28 @@ const HomePage = () => {
       </section>
 
       {/* Obras em Destaque */}
-      <section className="container mx-auto pt-6 sm:pt-8 pb-12 sm:pb-16 px-4">
-        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-10 font-serif">Obras em Destaque</h2>
-        {isLoading ? (
-          <div className="flex h-40 items-center justify-center">
-            <p>Carregando obras...</p>
+      <section className="container mx-auto py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12 sm:mb-16 font-serif">Obras em Destaque</h2>
+          {isLoading ? (
+            <div className="flex h-40 items-center justify-center">
+              <p>Carregando obras...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 md:gap-12 mb-12 sm:mb-16">
+              {featuredArtworks.map((artwork) => (
+                <ArtworkCard key={artwork.id} artwork={artwork} categories={categories} />
+              ))}
+            </div>
+          )}
+          <div className="flex justify-center">
+            <Link
+              to="/portfolio"
+              className="px-8 sm:px-10 py-4 bg-green-600 text-white font-semibold rounded-lg shadow-lg hover:bg-green-700 hover:shadow-xl transition-all duration-300 text-lg sm:text-xl flex items-center gap-3"
+            >
+              Ver Todas as Obras <span className="ml-2">→</span>
+            </Link>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 max-w-6xl mx-auto mb-8">
-            {featuredArtworks.map((artwork) => (
-              <ArtworkCard key={artwork.id} artwork={artwork} categories={categories} />
-            ))}
-          </div>
-        )}
-        <div className="flex justify-center mt-4">
-          <Link
-            to="/portfolio"
-            className="px-6 sm:px-8 py-3 sm:py-4 bg-green-600 text-white font-semibold rounded-lg shadow hover:bg-green-700 transition-all duration-300 text-base sm:text-lg flex items-center gap-2"
-          >
-            Ver Todas as Obras <span className="ml-2">→</span>
-          </Link>
         </div>
       </section>
 
