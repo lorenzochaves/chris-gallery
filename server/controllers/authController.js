@@ -1,7 +1,8 @@
 const pool = require("../db");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-const COOKIE_NAME = "admin-auth";
+const JWT_SECRET = process.env.JWT_SECRET || "sua-chave-secreta-temporaria";
 
 
 // Login real
@@ -22,30 +23,56 @@ exports.login = async (req, res) => {
       return res.status(401).json({ erro: "Senha incorreta" });
     }
 
-    res.cookie(COOKIE_NAME, "true", {
-      httpOnly: true,            // não acessível via JavaScript
-      secure: true,              // só envia em HTTPS (produção)
-      sameSite: "none",          // permite cross-site
-      path: "/",                 // <<-- faz o cookie valer para TODAS as rotas
-      domain: "chris-gallery.onrender.com", // opcional, mas explicita o domínio
-      maxAge: 24 * 60 * 60 * 1000,
-    });
+    // Criar token JWT
+    const token = jwt.sign(
+      { 
+        id: usuario.id,
+        email: usuario.email,
+        nome: usuario.nome
+      },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
 
-    res.json({ mensagem: "Login bem-sucedido", usuario: { id: usuario.id, nome: usuario.nome } });
+    res.json({ 
+      mensagem: "Login bem-sucedido", 
+      usuario: { 
+        id: usuario.id, 
+        nome: usuario.nome,
+        email: usuario.email
+      },
+      token
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ erro: "Erro no login" });
   }
 };
 
-// Logout
+// Logout (não é necessário com JWT, mas mantemos para compatibilidade)
 exports.logout = (req, res) => {
-  res.clearCookie(COOKIE_NAME);
   res.json({ mensagem: "Logout realizado com sucesso" });
 };
 
 // Verificar autenticação
 exports.checkAuth = (req, res) => {
-  const isAuthenticated = req.cookies[COOKIE_NAME] === "true";
-  res.json({ isAuthenticated });
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.json({ isAuthenticated: false });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    res.json({ 
+      isAuthenticated: true,
+      usuario: {
+        id: decoded.id,
+        nome: decoded.nome,
+        email: decoded.email
+      }
+    });
+  } catch (err) {
+    res.json({ isAuthenticated: false });
+  }
 };
