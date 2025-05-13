@@ -40,13 +40,7 @@ exports.login = async (req, res) => {
       return res.status(401).json({ erro: "Senha incorreta" });
     }
 
-    res.cookie(COOKIE_NAME, "true", {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-      maxAge: 24 * 60 * 60 * 1000, // 24 horas
-      path: "/",
-    });
+    res.cookie(COOKIE_NAME, "true", { maxAge: 24 * 60 * 60 * 1000 });
 
     res.json({ mensagem: "Login bem-sucedido", usuario: { id: usuario.id, nome: usuario.nome } });
   } catch (err) {
