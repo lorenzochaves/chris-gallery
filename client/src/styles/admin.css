@@ -1,0 +1,346 @@
+/* Admin Panel Styles */
+.admin-container {
+  min-height: 100vh;
+  background-color: rgb(249 250 251);
+  padding-top: 7rem;
+}
+
+.admin-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .admin-content {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .admin-content {
+    padding: 2rem;
+  }
+}
+
+.admin-header {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .admin-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.admin-title {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  color: rgb(17 24 39);
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.admin-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  border: 1px solid rgb(229 231 235);
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.admin-card:hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.admin-card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgb(229 231 235);
+}
+
+.admin-card-body {
+  padding: 1.5rem;
+}
+
+.admin-card-footer {
+  padding: 1.5rem;
+  padding-top: 0;
+  border-top: 1px solid rgb(229 231 235);
+}
+
+.admin-form {
+  max-width: 42rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.admin-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(55 65 81);
+}
+
+.admin-input,
+.admin-textarea,
+.admin-select {
+  display: block;
+  width: 100%;
+  border-radius: 0.375rem;
+  border: 1px solid rgb(209 213 219);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.admin-input:focus,
+.admin-textarea:focus,
+.admin-select:focus {
+  outline: none;
+  border-color: rgb(59 130 246);
+  box-shadow: 0 0 0 2px rgb(59 130 246 / 0.2);
+}
+
+.admin-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  border: 1px solid transparent;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  transition: all 0.2s;
+}
+
+.admin-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(59 130 246 / 0.2);
+}
+
+.admin-button-primary {
+  background-color: rgb(37 99 235);
+  color: white;
+}
+
+.admin-button-primary:hover {
+  background-color: rgb(29 78 216);
+}
+
+.admin-button-secondary {
+  background-color: white;
+  color: rgb(55 65 81);
+  border-color: rgb(209 213 219);
+}
+
+.admin-button-secondary:hover {
+  background-color: rgb(249 250 251);
+}
+
+.admin-button-danger {
+  background-color: rgb(220 38 38);
+  color: white;
+}
+
+.admin-button-danger:hover {
+  background-color: rgb(185 28 28);
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .admin-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .admin-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .admin-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.admin-image-preview {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.admin-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-image-actions {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.2s;
+}
+
+.admin-image-preview:hover .admin-image-actions {
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 1;
+}
+
+.admin-image-action-button {
+  padding: 0.5rem;
+  border-radius: 9999px;
+  background-color: white;
+  color: rgb(17 24 39);
+  transition: all 0.2s;
+}
+
+.admin-image-action-button:hover {
+  background-color: rgb(243 244 246);
+}
+
+.admin-alert {
+  border-radius: 0.375rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-alert-error {
+  background-color: rgb(254 242 242);
+  color: rgb(185 28 28);
+}
+
+.admin-alert-success {
+  background-color: rgb(240 253 244);
+  color: rgb(22 101 52);
+}
+
+.admin-alert-info {
+  background-color: rgb(239 246 255);
+  color: rgb(29 78 216);
+}
+
+.admin-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 10rem;
+}
+
+.admin-loading-spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 4px solid rgb(59 130 246);
+  border-top-color: transparent;
+  border-radius: 9999px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .admin-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .admin-actions {
+    flex-direction: column;
+  }
+  
+  .admin-button {
+    width: 100%;
+  }
+}
+
+/* Utility classes */
+.admin-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-ellipsis {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Table styles */
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.admin-table-header {
+  background-color: rgb(249 250 251);
+}
+
+.admin-table-header-cell {
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgb(107 114 128);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-table-body {
+  background-color: white;
+}
+
+.admin-table-row {
+  transition: background-color 0.2s;
+}
+
+.admin-table-row:hover {
+  background-color: rgb(249 250 251);
+}
+
+.admin-table-cell {
+  padding: 1rem 1.5rem;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  color: rgb(17 24 39);
+} 
