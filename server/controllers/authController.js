@@ -23,8 +23,11 @@ exports.login = async (req, res) => {
     }
 
     res.cookie(COOKIE_NAME, "true", {
-      httpOnly: true,
-      secure: false,
+      httpOnly: true,            // não acessível via JavaScript
+      secure: true,              // só envia em HTTPS (produção)
+      sameSite: "none",          // permite cross-site
+      path: "/",                 // <<-- faz o cookie valer para TODAS as rotas
+      domain: "chris-gallery.onrender.com", // opcional, mas explicita o domínio
       maxAge: 24 * 60 * 60 * 1000,
     });
 
