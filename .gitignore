@@ -3,4 +3,4 @@ server/.env
 client/.env
 .env
 client/build
-*.DS_Store
+.DS_Store
