@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Link, useParams, useNavigate } from "react-router-dom"
 import api from "../../utils/api"
+import "../../styles/admin.css"
 
 const AdminEditCategoryPage = () => {
   const { id } = useParams()
@@ -50,67 +51,89 @@ const AdminEditCategoryPage = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto py-12 px-4 text-center">
-        <p>Carregando categoria...</p>
+      <div className="admin-container">
+        <div className="admin-content">
+          <div className="admin-loading">
+            <div className="admin-loading-spinner" />
+          </div>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-white pt-28">
-      <div className="container mx-auto py-12 px-4">
-        <div className="mb-8 flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Editar Categoria</h1>
-          <Link to="/admin/categories" className="btn btn-outline">
+    <div className="admin-container">
+      <div className="admin-content">
+        <div className="admin-header">
+          <h1 className="admin-title">Editar Categoria</h1>
+          <Link to="/admin/categories" className="admin-button admin-button-secondary">
             Voltar
           </Link>
         </div>
 
-        <div className="mx-auto max-w-2xl">
-          {error && <div className="mb-6 rounded-md bg-red-50 p-4 text-sm text-red-500">{error}</div>}
+        <div className="admin-card">
+          <div className="admin-card-body">
+            {error && <div className="admin-alert admin-alert-error">{error}</div>}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label htmlFor="name" className="block text-sm font-medium">
-                Nome da Categoria
-              </label>
-              <input
-                id="name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="input"
-                required
-              />
-            </div>
+            <form onSubmit={handleSubmit} className="admin-form">
+              <div className="admin-form-group">
+                <label htmlFor="name" className="admin-label">
+                  Nome da Categoria
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="admin-input"
+                  required
+                />
+              </div>
 
-            <div className="space-y-2">
-              <label htmlFor="slug" className="block text-sm font-medium">
-                Slug (opcional)
-              </label>
-              <input id="slug" type="text" value={slug} onChange={(e) => setSlug(e.target.value)} className="input" />
-              <p className="text-xs text-gray-500">
-                O slug é usado para URLs. Se não for fornecido, será gerado automaticamente a partir do nome.
-              </p>
-            </div>
+              <div className="admin-form-group">
+                <label htmlFor="slug" className="admin-label">
+                  Slug (opcional)
+                </label>
+                <input
+                  id="slug"
+                  type="text"
+                  value={slug}
+                  onChange={(e) => setSlug(e.target.value)}
+                  className="admin-input"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  O slug é usado para URLs. Se não for fornecido, será gerado automaticamente a partir do nome.
+                </p>
+              </div>
 
-            <div className="space-y-2">
-              <label htmlFor="imagensAdicionais" className="block text-sm font-medium">
-                Imagens Adicionais
-              </label>
-              <input
-                id="imagensAdicionais"
-                type="file"
-                accept="image/*,video/mp4"
-                multiple
-                onChange={e => setImagensAdicionais([...e.target.files])}
-              />
-            </div>
+              <div className="admin-form-group">
+                <label htmlFor="imagensAdicionais" className="admin-label">
+                  Imagens Adicionais
+                </label>
+                <input
+                  id="imagensAdicionais"
+                  type="file"
+                  accept="image/*,video/mp4"
+                  multiple
+                  onChange={(e) => setImagensAdicionais([...e.target.files])}
+                  className="admin-input"
+                />
+              </div>
 
-            <button type="submit" className="btn btn-primary w-full" disabled={isSaving}>
-              {isSaving ? "Salvando..." : "Atualizar Categoria"}
-            </button>
-          </form>
+              <div className="flex justify-end space-x-4">
+                <Link to="/admin/categories" className="admin-button admin-button-secondary">
+                  Cancelar
+                </Link>
+                <button
+                  type="submit"
+                  className="admin-button admin-button-primary"
+                  disabled={isSaving}
+                >
+                  {isSaving ? "Salvando..." : "Atualizar Categoria"}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

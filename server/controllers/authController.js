@@ -3,24 +3,6 @@ const bcrypt = require("bcrypt");
 
 const COOKIE_NAME = "admin-auth";
 
-// Cadastro (1x só, para criar usuário admin)
-exports.register = async (req, res) => {
-  const { nome, email, senha } = req.body;
-
-  try {
-    const senhaHash = await bcrypt.hash(senha, 10);
-
-    const result = await pool.query(
-      "INSERT INTO usuarios (nome, email, senha_hash) VALUES ($1, $2, $3) RETURNING id, nome, email",
-      [nome, email, senhaHash]
-    );
-
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ erro: "Erro ao registrar usuário" });
-  }
-};
 
 // Login real
 exports.login = async (req, res) => {
