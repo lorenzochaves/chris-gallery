@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import api from "../../utils/api"
 import { FaInstagram, FaWhatsapp, FaEnvelope, FaPhone } from "react-icons/fa"
+import "../../styles/admin.css"
 
 const AdminProfilePage = () => {
   const [profile, setProfile] = useState(null)
@@ -84,118 +85,172 @@ const AdminProfilePage = () => {
     setProfileImages(profileImages.filter(img => img.id !== id))
   }
 
-  if (!profile || !contacts) return <div className="container mx-auto py-12 px-4">Carregando...</div>
+  if (!profile || !contacts) {
+    return (
+      <div className="admin-container">
+        <div className="admin-content">
+          <div className="admin-loading">
+            <div className="admin-loading-spinner" />
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className="min-h-screen bg-white pt-28">
-      <div className="container mx-auto py-12 px-4 max-w-3xl">
-        <h1 className="text-3xl font-bold mb-8">Editar Sobre Mim & Contatos</h1>
-        {error && <div className="mb-4 text-red-600">{error}</div>}
-        {success && <div className="mb-4 text-green-600">{success}</div>}
+    <div className="admin-container">
+      <div className="admin-content">
+        <div className="admin-header">
+          <h1 className="admin-title">Editar Sobre Mim & Contatos</h1>
+        </div>
+
+        {error && <div className="admin-alert admin-alert-error">{error}</div>}
+        {success && <div className="admin-alert admin-alert-success">{success}</div>}
 
         {/* Nome e Bio */}
-        <form onSubmit={handleProfileSubmit} className="space-y-6 bg-white rounded-lg shadow p-6 mb-10">
-          <h2 className="text-xl font-semibold mb-4">Nome e Biografia</h2>
-          <div>
-            <label className="block text-sm font-medium mb-1">Nome</label>
-            <input
-              name="nome"
-              value={profile.nome || ""}
-              onChange={handleProfileChange}
-              className="input w-full border rounded px-3 py-2"
-              required
-            />
+        <div className="admin-card mb-8">
+          <div className="admin-card-header">
+            <h2 className="text-xl font-semibold">Nome e Biografia</h2>
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Subtítulo</label>
-            <input
-              name="subtitulo"
-              value={profile.subtitulo || ""}
-              onChange={handleProfileChange}
-              className="input w-full border rounded px-3 py-2"
-              placeholder="Ex: O trabalho de uma vida de abraçar tanto o criativo quanto o quantitativo..."
-            />
+          <div className="admin-card-body">
+            <form onSubmit={handleProfileSubmit} className="admin-form">
+              <div className="admin-form-group">
+                <label className="admin-label">Nome</label>
+                <input
+                  name="nome"
+                  value={profile.nome || ""}
+                  onChange={handleProfileChange}
+                  className="admin-input"
+                  required
+                />
+              </div>
+              <div className="admin-form-group">
+                <label className="admin-label">Subtítulo</label>
+                <input
+                  name="subtitulo"
+                  value={profile.subtitulo || ""}
+                  onChange={handleProfileChange}
+                  className="admin-input"
+                  placeholder="Ex: O trabalho de uma vida de abraçar tanto o criativo quanto o quantitativo..."
+                />
+              </div>
+              <div className="admin-form-group">
+                <label className="admin-label">Biografia</label>
+                <textarea
+                  name="bio"
+                  value={profile.bio || ""}
+                  onChange={handleProfileChange}
+                  className="admin-textarea"
+                  rows={5}
+                />
+              </div>
+              <div className="flex justify-end">
+                <button type="submit" className="admin-button admin-button-primary" disabled={isSavingProfile}>
+                  {isSavingProfile ? "Salvando..." : "Salvar"}
+                </button>
+              </div>
+            </form>
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Biografia</label>
-            <textarea
-              name="bio"
-              value={profile.bio || ""}
-              onChange={handleProfileChange}
-              className="input w-full border rounded px-3 py-2"
-              rows={5}
-            />
-          </div>
-          <button type="submit" className="btn btn-primary" disabled={isSavingProfile}>
-            {isSavingProfile ? "Salvando..." : "Salvar"}
-          </button>
-        </form>
+        </div>
 
         {/* Contatos */}
-        <form onSubmit={handleContactsSubmit} className="space-y-6 bg-white rounded-lg shadow p-6 mb-10">
-          <h2 className="text-xl font-semibold mb-4">Contatos</h2>
-          <div className="flex items-center gap-2">
-            <FaEnvelope className="h-5 w-5 text-gray-500" />
-            <input
-              name="email"
-              value={contacts.email || ""}
-              onChange={handleContactsChange}
-              className="input w-full border rounded px-3 py-2"
-              placeholder="Email"
-            />
+        <div className="admin-card mb-8">
+          <div className="admin-card-header">
+            <h2 className="text-xl font-semibold">Contatos</h2>
           </div>
-          <div className="flex items-center gap-2">
-            <FaPhone className="h-5 w-5 text-gray-500" />
-            <input
-              name="telefone"
-              value={contacts.telefone || ""}
-              onChange={handleContactsChange}
-              className="input w-full border rounded px-3 py-2"
-              placeholder="Telefone"
-            />
+          <div className="admin-card-body">
+            <form onSubmit={handleContactsSubmit} className="admin-form">
+              <div className="admin-form-group">
+                <label className="admin-label flex items-center gap-2">
+                  <FaEnvelope className="h-5 w-5 text-gray-500" />
+                  Email
+                </label>
+                <input
+                  name="email"
+                  value={contacts.email || ""}
+                  onChange={handleContactsChange}
+                  className="admin-input"
+                  placeholder="Email"
+                />
+              </div>
+              <div className="admin-form-group">
+                <label className="admin-label flex items-center gap-2">
+                  <FaPhone className="h-5 w-5 text-gray-500" />
+                  Telefone
+                </label>
+                <input
+                  name="telefone"
+                  value={contacts.telefone || ""}
+                  onChange={handleContactsChange}
+                  className="admin-input"
+                  placeholder="Telefone"
+                />
+              </div>
+              <div className="admin-form-group">
+                <label className="admin-label flex items-center gap-2">
+                  <FaWhatsapp className="h-5 w-5 text-green-500" />
+                  WhatsApp
+                </label>
+                <input
+                  name="whatsapp"
+                  value={contacts.whatsapp || ""}
+                  onChange={handleContactsChange}
+                  className="admin-input"
+                  placeholder="WhatsApp"
+                />
+              </div>
+              <div className="admin-form-group">
+                <label className="admin-label flex items-center gap-2">
+                  <FaInstagram className="h-5 w-5 text-pink-500" />
+                  Instagram
+                </label>
+                <input
+                  name="instagram"
+                  value={contacts.instagram || ""}
+                  onChange={handleContactsChange}
+                  className="admin-input"
+                  placeholder="Instagram"
+                />
+              </div>
+              <div className="flex justify-end">
+                <button type="submit" className="admin-button admin-button-primary" disabled={isSavingContacts}>
+                  {isSavingContacts ? "Salvando..." : "Salvar"}
+                </button>
+              </div>
+            </form>
           </div>
-          <div className="flex items-center gap-2">
-            <FaWhatsapp className="h-5 w-5 text-green-500" />
-            <input
-              name="whatsapp"
-              value={contacts.whatsapp || ""}
-              onChange={handleContactsChange}
-              className="input w-full border rounded px-3 py-2"
-              placeholder="WhatsApp"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <FaInstagram className="h-5 w-5 text-pink-500" />
-            <input
-              name="instagram"
-              value={contacts.instagram || ""}
-              onChange={handleContactsChange}
-              className="input w-full border rounded px-3 py-2"
-              placeholder="Instagram"
-            />
-          </div>
-          <button type="submit" className="btn btn-primary" disabled={isSavingContacts}>
-            {isSavingContacts ? "Salvando..." : "Salvar"}
-          </button>
-        </form>
+        </div>
 
         {/* Imagens do Perfil */}
-        <div className="bg-white rounded-lg shadow p-6 mb-10">
-          <h2 className="text-xl font-semibold mb-4">Imagens do Perfil (Sobre Mim)</h2>
-          <div className="flex flex-wrap gap-4 mb-2">
-            {profileImages.map(img => (
-              <div key={img.id} className="relative">
-                <img src={img.url} alt="Perfil" style={{ maxWidth: 120, borderRadius: 8 }} />
-                <button
-                  type="button"
-                  onClick={() => handleDeleteProfileImage(img.id)}
-                  className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center"
-                  title="Remover"
-                >×</button>
-              </div>
-            ))}
+        <div className="admin-card">
+          <div className="admin-card-header">
+            <h2 className="text-xl font-semibold">Imagens do Perfil (Sobre Mim)</h2>
           </div>
-          <input type="file" accept="image/*" onChange={handleAddProfileImage} />
+          <div className="admin-card-body">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
+              {profileImages.map(img => (
+                <div key={img.id} className="admin-image-preview">
+                  <img src={img.url} alt="Perfil" className="w-full h-full object-cover" />
+                  <div className="admin-image-actions">
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteProfileImage(img.id)}
+                      className="admin-image-action-button"
+                      title="Remover"
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleAddProfileImage}
+              className="admin-input"
+            />
+          </div>
         </div>
       </div>
     </div>

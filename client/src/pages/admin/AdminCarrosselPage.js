@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import api from "../../utils/api"
+import "../../styles/admin.css"
 
 const AdminCarrosselPage = () => {
   const [carrosselImages, setCarrosselImages] = useState([])
@@ -42,28 +43,48 @@ const AdminCarrosselPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white pt-28">
-      <div className="container mx-auto py-12 px-4 max-w-2xl">
-        <h1 className="text-3xl font-bold mb-8">Customizar Carrossel da Home</h1>
-        {error && <div className="mb-4 text-red-600">{error}</div>}
-        {success && <div className="mb-4 text-green-600">{success}</div>}
-        <div className="flex flex-wrap gap-4 mb-4">
-          {carrosselImages.map(img => (
-            <div key={img.id} className="relative">
-              <img src={img.url} alt="Carrossel" style={{ maxWidth: 120, borderRadius: 8 }} />
-              <button
-                type="button"
-                onClick={() => handleDeleteCarrosselImage(img.id)}
-                className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center"
-                title="Remover"
-              >×</button>
-            </div>
-          ))}
+    <div className="admin-container">
+      <div className="admin-content">
+        <div className="admin-header">
+          <h1 className="admin-title">Customizar Carrossel da Home</h1>
         </div>
-        {carrosselImages.length < 5 && (
-          <input type="file" accept="image/*" onChange={handleAddCarrosselImage} />
-        )}
-        <div className="text-sm text-gray-500 mt-2">Máximo de 5 imagens.</div>
+
+        {error && <div className="admin-alert admin-alert-error">{error}</div>}
+        {success && <div className="admin-alert admin-alert-success">{success}</div>}
+
+        <div className="admin-card">
+          <div className="admin-card-header">
+            <h2 className="text-xl font-semibold">Imagens do Carrossel</h2>
+          </div>
+          <div className="admin-card-body">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
+              {carrosselImages.map(img => (
+                <div key={img.id} className="admin-image-preview">
+                  <img src={img.url} alt="Carrossel" className="w-full h-full object-cover" />
+                  <div className="admin-image-actions">
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteCarrosselImage(img.id)}
+                      className="admin-image-action-button"
+                      title="Remover"
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {carrosselImages.length < 5 && (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleAddCarrosselImage}
+                className="admin-input"
+              />
+            )}
+            <div className="text-sm text-gray-500 mt-2">Máximo de 5 imagens.</div>
+          </div>
+        </div>
       </div>
     </div>
   )

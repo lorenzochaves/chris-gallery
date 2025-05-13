@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import api from "../../utils/api"
+import "../../styles/admin.css"
 
 const AdminCategoriesPage = () => {
   const [categories, setCategories] = useState([])
@@ -39,12 +40,12 @@ const AdminCategoriesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white pt-28">
-      <div className="container mx-auto py-12 px-4">
-        <div className="mb-8 flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Gerenciar Categorias</h1>
-          <div className="flex gap-4">
-            <Link to="/admin/dashboard" className="btn btn-outline flex items-center gap-2">
+    <div className="admin-container">
+      <div className="admin-content">
+        <div className="admin-header">
+          <h1 className="admin-title">Gerenciar Categorias</h1>
+          <div className="admin-actions">
+            <Link to="/admin/dashboard" className="admin-button admin-button-secondary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -55,14 +56,14 @@ const AdminCategoriesPage = () => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="h-4 w-4"
+                className="h-4 w-4 mr-2"
               >
                 <path d="m12 19-7-7 7-7" />
                 <path d="M19 12H5" />
               </svg>
               Voltar
             </Link>
-            <Link to="/admin/categories/new" className="btn btn-primary flex items-center gap-2">
+            <Link to="/admin/categories/new" className="admin-button admin-button-primary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -73,7 +74,7 @@ const AdminCategoriesPage = () => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="h-4 w-4"
+                className="h-4 w-4 mr-2"
               >
                 <path d="M5 12h14" />
                 <path d="M12 5v14" />
@@ -84,62 +85,64 @@ const AdminCategoriesPage = () => {
         </div>
 
         {isLoading ? (
-          <div className="flex h-40 items-center justify-center">
-            <p>Carregando categorias...</p>
+          <div className="admin-loading">
+            <div className="admin-loading-spinner" />
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="admin-grid">
             {categories.map((category) => (
-              <div key={category.id} className="rounded-lg border border-gray-200 overflow-hidden">
-                <div className="p-4">
-                  <h3 className="font-medium">{category.name}</h3>
+              <div key={category.id} className="admin-card">
+                <div className="admin-card-body">
+                  <h3 className="font-medium admin-truncate">{category.name}</h3>
                   <p className="text-sm text-gray-500">Slug: {category.slug}</p>
                 </div>
-                <div className="flex justify-between p-4 pt-0">
-                  <Link
-                    to={`/admin/categories/edit/${category.id}`}
-                    className="btn btn-outline btn-sm flex items-center gap-2"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-4 w-4"
+                <div className="admin-card-footer">
+                  <div className="flex justify-between">
+                    <Link
+                      to={`/admin/categories/edit/${category.id}`}
+                      className="admin-button admin-button-secondary"
                     >
-                      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                    </svg>
-                    Editar
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(category.id)}
-                    className="btn btn-destructive btn-sm flex items-center gap-2"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-4 w-4"
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-4 w-4 mr-2"
+                      >
+                        <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                      </svg>
+                      Editar
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(category.id)}
+                      className="admin-button admin-button-danger"
                     >
-                      <path d="M3 6h18" />
-                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                      <line x1="10" x2="10" y1="11" y2="17" />
-                      <line x1="14" x2="14" y1="11" y2="17" />
-                    </svg>
-                    Excluir
-                  </button>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-4 w-4 mr-2"
+                      >
+                        <path d="M3 6h18" />
+                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                        <line x1="10" x2="10" y1="11" y2="17" />
+                        <line x1="14" x2="14" y1="11" y2="17" />
+                      </svg>
+                      Excluir
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -147,7 +150,7 @@ const AdminCategoriesPage = () => {
         )}
 
         {!isLoading && categories.length === 0 && (
-          <div className="mt-8 text-center text-gray-500">
+          <div className="admin-alert admin-alert-info">
             Nenhuma categoria cadastrada. Clique em "Nova Categoria" para adicionar.
           </div>
         )}
