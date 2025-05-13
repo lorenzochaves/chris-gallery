@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5001;
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:3000", // URL do seu frontend React
+    origin: ["http://localhost:3000", "https://chris-gallery.vercel.app"], // URL do seu frontend React
     credentials: true, // Necessário para usar cookies
   })
 );
