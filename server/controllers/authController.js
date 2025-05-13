@@ -24,7 +24,7 @@ exports.login = async (req, res) => {
 
     res.cookie(COOKIE_NAME, "true", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: false,
       maxAge: 24 * 60 * 60 * 1000,
     });
 
