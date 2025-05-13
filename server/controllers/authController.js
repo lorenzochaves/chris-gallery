@@ -43,7 +43,10 @@ exports.login = async (req, res) => {
     res.cookie(COOKIE_NAME, "true", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 24 * 60 * 60 * 1000, // 24 horas
+      path: "/",
+      domain: process.env.NODE_ENV === "production" ? ".vercel.app" : undefined
     });
 
     res.json({ mensagem: "Login bem-sucedido", usuario: { id: usuario.id, nome: usuario.nome } });

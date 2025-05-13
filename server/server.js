@@ -15,9 +15,11 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://chris-gallery.vercel.app"  // ajuste para o domínio real do seu Vercel
+      "https://chris-gallery.vercel.app"
     ],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
