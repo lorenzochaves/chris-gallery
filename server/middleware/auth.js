@@ -1,6 +1,9 @@
 exports.isAuthenticated = (req, res, next) => {
   try {
+    console.log('Headers recebidos:', req.headers);
     console.log('Cookies recebidos:', req.cookies);
+    console.log('Cookie específico:', req.cookies["admin-auth"]);
+    
     const authCookie = req.cookies["admin-auth"];
     
     if (!authCookie) {

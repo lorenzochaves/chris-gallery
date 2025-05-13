@@ -44,7 +44,9 @@ exports.login = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
       sameSite: "none",
       secure: true,
-      httpOnly: true
+      httpOnly: true,
+      path: "/",
+      domain: process.env.NODE_ENV === "production" ? ".vercel.app" : "localhost"
     });
 
     res.json({ mensagem: "Login bem-sucedido", usuario: { id: usuario.id, nome: usuario.nome } });
