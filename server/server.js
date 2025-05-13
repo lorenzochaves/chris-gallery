@@ -26,10 +26,10 @@ app.use(express.json()); // Para ler JSON
 app.use(cookieParser()); // Para ler cookies (autenticação)
 app.use(express.urlencoded({ extended: true })); // Para formulários
 
-// Servir arquivos estáticos do React em produção
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../client/build")));
-}
+// // Servir arquivos estáticos do React em produção
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "../client/build")));
+// }
 
 // Rotas da API
 app.use("/api/artworks", artworkRoutes);
@@ -43,11 +43,11 @@ app.get("/api/health", (req, res) => {
 });
 
 // Rota para servir o React em produção
-if (process.env.NODE_ENV === "production") {
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/build/index.html"));
-  });
-}
+// if (process.env.NODE_ENV === "production") {
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "../client/build/index.html"));
+//   });
+// }
 
 // Inicia o servidor
 app.listen(PORT, () => {
