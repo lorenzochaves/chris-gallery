@@ -17,6 +17,11 @@
   --muted: #e5e5e5;
 }
 
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   margin: 0;
   font-family: 'DM Sans', sans-serif;
@@ -27,6 +32,7 @@ body {
   background: 
     linear-gradient(rgba(255,250,244,0.92), rgba(255,250,244,0.92)),
     url('../public/background.jpeg') center center / cover no-repeat fixed;
+  overflow-x: hidden;
 }
 
 html, body, #root {
@@ -49,7 +55,7 @@ html, body, #root {
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center rounded-none text-sm font-medium transition-all duration-300 focus-visible:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+    @apply inline-flex items-center justify-center rounded-none text-sm font-medium transition-all duration-300 focus-visible:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none px-4 py-2 sm:px-6 sm:py-3;
   }
 
   .btn-primary {
@@ -69,11 +75,11 @@ html, body, #root {
   }
 
   .input {
-    @apply flex h-12 w-full rounded-none border-2 border-gray-300 bg-white px-4 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-300;
+    @apply flex h-10 sm:h-12 w-full rounded-none border-2 border-gray-300 bg-white px-3 sm:px-4 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-300;
   }
 
   .badge {
-    @apply inline-flex items-center rounded-none border-2 px-3 py-1 text-xs font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2;
+    @apply inline-flex items-center rounded-none border-2 px-2 sm:px-3 py-1 text-xs font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2;
   }
 
   .badge-primary {
@@ -107,5 +113,24 @@ html, body, #root {
 
   .gallery-item:hover::after {
     @apply bg-black/20;
+  }
+
+  /* Melhorias para dispositivos móveis */
+  @media (max-width: 640px) {
+    .container {
+      @apply px-4;
+    }
+    
+    h1 {
+      @apply text-3xl;
+    }
+    
+    h2 {
+      @apply text-2xl;
+    }
+    
+    h3 {
+      @apply text-xl;
+    }
   }
 }

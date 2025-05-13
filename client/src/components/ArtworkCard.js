@@ -42,27 +42,27 @@ const ArtworkCard = ({ artwork, categories = [] }) => {
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
           )}
-          <div className={`absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white transition-opacity duration-300 ${isHovering ? 'opacity-100' : 'opacity-0'}`}>
-            <h3 className="text-2xl font-bold mb-2">{artwork.title}</h3>
+          <div className={`absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white transition-opacity duration-300 p-4 text-center ${isHovering ? 'opacity-100' : 'opacity-0'}`}>
+            <h3 className="text-xl sm:text-2xl font-bold mb-2">{artwork.title}</h3>
             <div className="flex flex-wrap gap-2 justify-center">
               {categoryNames.map((name, index) => (
-                <span key={index} className="px-3 py-1 bg-white/20 rounded-full text-sm">
+                <span key={index} className="px-2 sm:px-3 py-1 bg-white/20 rounded-full text-xs sm:text-sm">
                   {name}
                 </span>
               ))}
             </div>
             {artwork.available && artwork.price && (
-              <p className="mt-4 text-xl font-semibold">
+              <p className="mt-4 text-lg sm:text-xl font-semibold">
                 R$ {artwork.price.toLocaleString('pt-BR')}
               </p>
             )}
           </div>
         </div>
-        <div className="p-4">
-          <h3 className="text-xl font-medium text-gray-900 mb-2">{artwork.title}</h3>
+        <div className="p-3 sm:p-4">
+          <h3 className="text-lg sm:text-xl font-medium text-gray-900 mb-2">{artwork.title}</h3>
           <div className="flex flex-wrap gap-2">
             {categoryNames.map((name, index) => (
-              <span key={index} className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-600">
+              <span key={index} className="px-2 sm:px-3 py-1 bg-gray-100 rounded-full text-xs sm:text-sm text-gray-600">
                 {name}
               </span>
             ))}

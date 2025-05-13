@@ -18,21 +18,21 @@ const Navbar = () => {
 
   return (
     <nav className="w-full fixed top-0 z-50" style={{background: 'linear-gradient(90deg, #f8fafc 0%, #f3f4f6 60%, #e7e5e4 100%)'}}>
-      <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-8">
+      <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-4 sm:px-8">
         {/* Esquerda: Nome do site (sem logo) */}
         <div className="flex items-center gap-4">
-          <Link to="/" className="text-5xl font-extrabold font-fleur tracking-wide text-gray-900">
+          <Link to="/" className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-fleur tracking-wide text-gray-900">
             Chris Fontenelle Art
           </Link>
         </div>
 
         {/* Centro: Navegação */}
-        <div className="hidden md:flex items-center gap-16">
+        <div className="hidden md:flex items-center gap-8 lg:gap-16">
           {routes.map((route) => (
             <Link
               key={route.href}
               to={route.href}
-              className={`text-xl font-normal transition-all duration-300 relative text-gray-600 hover:text-amber-700 ${
+              className={`text-lg lg:text-xl font-normal transition-all duration-300 relative text-gray-600 hover:text-amber-700 ${
                 isActive(route.href)
                   ? 'underline underline-offset-8 decoration-2 decoration-amber-400' : ''
               }`}
@@ -44,11 +44,11 @@ const Navbar = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2"
+          className="md:hidden p-2 text-gray-600 hover:text-amber-700 transition-colors duration-300"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           <svg
-            className="w-6 h-6 text-white"
+            className="w-6 h-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -74,15 +74,15 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden" style={{background: 'linear-gradient(90deg, #f8fafc 0%, #f3f4f6 60%, #e7e5e4 100%)'}}>
-          <div className="px-4 py-2 space-y-1">
+        <div className="md:hidden fixed inset-x-0 top-[72px] shadow-lg" style={{background: 'linear-gradient(90deg, #f8fafc 0%, #f3f4f6 60%, #e7e5e4 100%)'}}>
+          <div className="px-4 py-4 space-y-2">
             {routes.map((route) => (
               <Link
                 key={route.href}
                 to={route.href}
-                className={`block py-2 px-4 text-base font-normal transition-colors duration-300 text-gray-600 hover:text-amber-700 ${
+                className={`block py-3 px-4 text-lg font-normal transition-colors duration-300 text-gray-600 hover:text-amber-700 hover:bg-white/50 rounded-lg ${
                   isActive(route.href)
-                    ? 'underline underline-offset-8 decoration-2 decoration-amber-400' : ''
+                    ? 'bg-white/30 text-amber-700' : ''
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
